@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar usuários | LojaCarro</title>
+</head>
+<body>
+<a th:href="@{/}">← Voltar ao catálogo</a>
+<h1>Gerenciar usuários</h1>
+
+<p>Somente administradores podem acessar esta página.</p>
+
+<table border="1" cellpadding="8">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>E-mail</th>
+        <th>Papel</th>
+        <th>Ativo</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="usuario : ${usuarios}">
+        <td th:text="${usuario.id}"></td>
+        <td th:text="${usuario.nome}"></td>
+        <td th:text="${usuario.email}"></td>
+        <td th:text="${usuario.papel}"></td>
+        <td th:text="${usuario.ativo ? 'Sim' : 'Não'}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

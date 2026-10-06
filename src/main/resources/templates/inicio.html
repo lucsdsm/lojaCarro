@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carros | LojaCarro</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f4f6f8;
+            color: #1f2937;
+            font-family: Arial, sans-serif;
+        }
+
+        /* restante do CSS */
+    </style>
+</head>
+<body>
+    <header>
+        <div class="barra">
+            <h1 class="marca">LojaCarro</h1>
+
+            <div class="usuario">
+                <span th:text="${email}">usuario@exemplo.com</span>
+
+                <form th:action="@{/logout}" method="post">
+                    <input
+                            type="hidden"
+                            th:name="${_csrf.parameterName}"
+                            th:value="${_csrf.token}"
+                    >
+                    <button class="sair" type="submit">Sair</button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="topo">
+            <div>
+                <h2>Modelos disponíveis</h2>
+                <p class="subtitulo">Consulte os carros cadastrados na loja.</p>
+            </div>
+
+            <nav class="acoes">
+                <a
+                        class="botao"
+                        th:if="${podeGerenciarCarros}"
+                        th:href="@{/gestao/carros}"
+                >
+                    Gerenciar carros
+                </a>
+
+                <a
+                        class="botao secundario"
+                        th:if="${administrador}"
+                        th:href="@{/admin/usuarios}"
+                >
+                    Gerenciar usuários
+                </a>
+            </nav>
+        </section>
+
+        <p class="vazio" th:if="${#lists.isEmpty(carros)}">
+            Nenhum carro cadastrado ainda.
+        </p>
+
+        <section class="grade" th:unless="${#lists.isEmpty(carros)}">
+            <article class="carro" th:each="carro : ${carros}">
+                <h3 th:text="${carro.modelo}">Modelo</h3>
+
+                <p>
+                    Ano:
+                    <span th:text="${carro.ano}">2026</span>
+                </p>
+
+                <p class="preco">
+                    R$
+                    <span th:text="${#numbers.formatDecimal(carro.preco, 1, 2)}">
+                        0,00
+                    </span>
+                </p>
+            </article>
+        </section>
+    </main>
+</body>
+</html>

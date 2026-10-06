@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar carros | LojaCarro</title>
+</head>
+<body>
+<a th:href="@{/}">← Voltar ao catálogo</a>
+<h1>Gerenciar carros</h1>
+
+<p>
+    Esta área está disponível para funcionários e administradores.
+    O formulário de cadastro/edição será implementado aqui.
+</p>
+
+<table border="1" cellpadding="8">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Modelo</th>
+        <th>Ano</th>
+        <th>Preço</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="carro : ${carros}">
+        <td th:text="${carro.id}"></td>
+        <td th:text="${carro.modelo}"></td>
+        <td th:text="${carro.ano}"></td>
+        <td th:text="${carro.preco}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
