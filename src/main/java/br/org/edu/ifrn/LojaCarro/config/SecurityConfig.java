@@ -8,6 +8,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import br.org.edu.ifrn.LojaCarro.services.LogSistemaService;
+import org.springframework.security.web.context.SecurityContextHolderFilter;
+
 @Configuration
 public class SecurityConfig {
 
@@ -17,8 +20,16 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            LogSistemaService logSistemaService
+    ) throws Exception {
         return http
+                .addFilterAfter(
+                        new LogSistemaFilter(logSistemaService),
+                        SecurityContextHolderFilter.class
+                )
+
                 .authorizeHttpRequests(auth -> auth
 
                         // Recursos públicos e página de autenticação

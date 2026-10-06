@@ -1,12 +1,33 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Acesso negado</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso negado | LojaCarro</title>
+    <link rel="stylesheet" th:href="@{/css/sistema.css}">
 </head>
-<body>
-<h1>Acesso negado</h1>
-<p>Você não possui permissão para executar esta ação.</p>
-<a href="/carro/listarCarros">Voltar para carros</a>
+<body class="error-layout">
+<main class="card error-card">
+    <span class="error-code">403 — Acesso negado</span>
+
+    <h1>Você não tem permissão</h1>
+
+    <p class="subtitle">
+        Sua conta não possui o nível de acesso necessário para esta página
+        ou operação.
+    </p>
+
+    <div class="actions">
+        <a class="button" th:href="@{/}">
+            Voltar ao catálogo
+        </a>
+
+        <form th:action="@{/logout}" method="post">
+            <button class="button button-secondary" type="submit">
+                Sair
+            </button>
+        </form>
+    </div>
+</main>
 </body>
 </html>

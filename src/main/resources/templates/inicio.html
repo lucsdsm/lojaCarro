@@ -3,90 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carros | LojaCarro</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            background: #f4f6f8;
-            color: #1f2937;
-            font-family: Arial, sans-serif;
-        }
-
-        /* restante do CSS */
-    </style>
+    <title>Catálogo | LojaCarro</title>
+    <link rel="stylesheet" th:href="@{/css/sistema.css}">
 </head>
 <body>
-    <header>
-        <div class="barra">
-            <h1 class="marca">LojaCarro</h1>
+<header class="header">
+    <div class="container header-content">
+        <a class="brand" th:href="@{/}">LojaCarro</a>
 
-            <div class="usuario">
-                <span th:text="${email}">usuario@exemplo.com</span>
+        <div class="header-actions">
+            <span class="account" th:text="${email}">
+                usuario@exemplo.com
+            </span>
 
-                <form th:action="@{/logout}" method="post">
-                    <input
-                            type="hidden"
-                            th:name="${_csrf.parameterName}"
-                            th:value="${_csrf.token}"
-                    >
-                    <button class="sair" type="submit">Sair</button>
-                </form>
-            </div>
+            <form th:action="@{/logout}" method="post">
+                <button class="button button-secondary" type="submit">
+                    Sair
+                </button>
+            </form>
         </div>
-    </header>
+    </div>
+</header>
 
-    <main>
-        <section class="topo">
-            <div>
-                <h2>Modelos disponíveis</h2>
-                <p class="subtitulo">Consulte os carros cadastrados na loja.</p>
-            </div>
+<main class="container">
+    <section class="page-heading">
+        <div>
+            <h1>Modelos disponíveis</h1>
+            <p class="subtitle">Conheça os carros cadastrados na loja.</p>
+        </div>
 
-            <nav class="acoes">
-                <a
-                        class="botao"
-                        th:if="${podeGerenciarCarros}"
-                        th:href="@{/gestao/carros}"
+        <nav class="actions" aria-label="Gestão do sistema">
+            <a
+                    class="button"
+                    th:if="${podeGerenciarCarros}"
+                    th:href="@{/gestao/carros}"
+            >
+                Gerenciar carros
+            </a>
+
+            <a
+                    class="button button-secondary"
+                    th:if="${administrador}"
+                    th:href="@{/admin/usuarios}"
+            >
+                Gerenciar usuários
+            </a>
+        </nav>
+    </section>
+
+    <section class="card empty-state" th:if="${#lists.isEmpty(carros)}">
+        <h2>Nenhum carro disponível</h2>
+        <p>Os modelos cadastrados aparecerão aqui.</p>
+    </section>
+
+    <section
+            class="grid"
+            th:unless="${#lists.isEmpty(carros)}"
+            aria-label="Catálogo de carros"
+    >
+        <article class="card" th:each="carro : ${carros}">
+            <h2 class="vehicle-title" th:text="${carro.modelo}">Modelo</h2>
+
+            <p class="vehicle-meta">
+                Ano:
+                <span th:text="${carro.ano}">2026</span>
+            </p>
+
+            <p class="price">
+                R$
+                <span
+                        th:text="${#numbers.formatDecimal(
+                        carro.preco, 1, 'POINT', 2, 'COMMA'
+                    )}"
                 >
-                    Gerenciar carros
-                </a>
-
-                <a
-                        class="botao secundario"
-                        th:if="${administrador}"
-                        th:href="@{/admin/usuarios}"
-                >
-                    Gerenciar usuários
-                </a>
-            </nav>
-        </section>
-
-        <p class="vazio" th:if="${#lists.isEmpty(carros)}">
-            Nenhum carro cadastrado ainda.
-        </p>
-
-        <section class="grade" th:unless="${#lists.isEmpty(carros)}">
-            <article class="carro" th:each="carro : ${carros}">
-                <h3 th:text="${carro.modelo}">Modelo</h3>
-
-                <p>
-                    Ano:
-                    <span th:text="${carro.ano}">2026</span>
-                </p>
-
-                <p class="preco">
-                    R$
-                    <span th:text="${#numbers.formatDecimal(carro.preco, 1, 2)}">
-                        0,00
-                    </span>
-                </p>
-            </article>
-        </section>
-    </main>
+                    0,00
+                </span>
+            </p>
+        </article>
+    </section>
+</main>
 </body>
 </html>

@@ -4,33 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciar carros | LojaCarro</title>
+    <link rel="stylesheet" th:href="@{/css/sistema.css}">
 </head>
 <body>
-<a th:href="@{/}">← Voltar ao catálogo</a>
-<h1>Gerenciar carros</h1>
+<header class="header">
+    <div class="container header-content">
+        <a class="brand" th:href="@{/}">LojaCarro</a>
 
-<p>
-    Esta área está disponível para funcionários e administradores.
-    O formulário de cadastro/edição será implementado aqui.
-</p>
+        <div class="header-actions">
+            <a class="button button-secondary" th:href="@{/}">
+                Voltar ao catálogo
+            </a>
 
-<table border="1" cellpadding="8">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Modelo</th>
-        <th>Ano</th>
-        <th>Preço</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="carro : ${carros}">
-        <td th:text="${carro.id}"></td>
-        <td th:text="${carro.modelo}"></td>
-        <td th:text="${carro.ano}"></td>
-        <td th:text="${carro.preco}"></td>
-    </tr>
-    </tbody>
-</table>
+            <form th:action="@{/logout}" method="post">
+                <button class="button button-secondary" type="submit">
+                    Sair
+                </button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <section class="page-heading">
+        <div>
+            <h1>Gerenciar carros</h1>
+            <p class="subtitle">Consulte os veículos cadastrados no sistema.</p>
+        </div>
+
+        <span class="badge">Gestão de veículos</span>
+    </section>
+
+    <section class="card empty-state" th:if="${#lists.isEmpty(carros)}">
+        <h2>Nenhum carro cadastrado</h2>
+        <p>A lista será exibida quando houver veículos cadastrados.</p>
+    </section>
+
+    <section
+            class="card table-card"
+            th:unless="${#lists.isEmpty(carros)}"
+    >
+        <div class="table-scroll">
+            <table>
+                <caption>Veículos cadastrados</caption>
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Modelo</th>
+                    <th scope="col">Ano</th>
+                    <th scope="col">Preço</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="carro : ${carros}">
+                    <td th:text="${carro.id}">1</td>
+                    <td th:text="${carro.modelo}">Modelo</td>
+                    <td th:text="${carro.ano}">2026</td>
+                    <td>
+                        R$
+                        <span
+                                th:text="${#numbers.formatDecimal(
+                                carro.preco, 1, 'POINT', 2, 'COMMA'
+                            )}"
+                        >
+                            0,00
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
 </body>
 </html>

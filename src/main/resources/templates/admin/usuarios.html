@@ -4,32 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciar usuários | LojaCarro</title>
+    <link rel="stylesheet" th:href="@{/css/sistema.css}">
 </head>
 <body>
-<a th:href="@{/}">← Voltar ao catálogo</a>
-<h1>Gerenciar usuários</h1>
+<header class="header">
+    <div class="container header-content">
+        <a class="brand" th:href="@{/}">LojaCarro</a>
 
-<p>Somente administradores podem acessar esta página.</p>
+        <div class="header-actions">
+            <a class="button button-secondary" th:href="@{/}">
+                Voltar ao catálogo
+            </a>
 
-<table border="1" cellpadding="8">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Nome</th>
-        <th>E-mail</th>
-        <th>Papel</th>
-        <th>Ativo</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="usuario : ${usuarios}">
-        <td th:text="${usuario.id}"></td>
-        <td th:text="${usuario.nome}"></td>
-        <td th:text="${usuario.email}"></td>
-        <td th:text="${usuario.papel}"></td>
-        <td th:text="${usuario.ativo ? 'Sim' : 'Não'}"></td>
-    </tr>
-    </tbody>
-</table>
+            <form th:action="@{/logout}" method="post">
+                <button class="button button-secondary" type="submit">
+                    Sair
+                </button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <section class="page-heading">
+        <div>
+            <h1>Gerenciar usuários</h1>
+            <p class="subtitle">Consulte as contas e seus níveis de acesso.</p>
+        </div>
+
+        <span class="badge">Área administrativa</span>
+    </section>
+
+    <section class="card empty-state" th:if="${#lists.isEmpty(usuarios)}">
+        <h2>Nenhum usuário encontrado</h2>
+        <p>As contas cadastradas aparecerão nesta página.</p>
+    </section>
+
+    <section
+            class="card table-card"
+            th:unless="${#lists.isEmpty(usuarios)}"
+    >
+        <div class="table-scroll">
+            <table>
+                <caption>Contas cadastradas</caption>
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">E-mail</th>
+                    <th scope="col">Papel</th>
+                    <th scope="col">Status</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="usuario : ${usuarios}">
+                    <td th:text="${usuario.id}">1</td>
+                    <td th:text="${usuario.nome}">Nome</td>
+                    <td th:text="${usuario.email}">email@exemplo.com</td>
+
+                    <td>
+                        <span class="badge" th:switch="${usuario.papel.name()}">
+                            <span th:case="'ADMIN'">Administrador</span>
+                            <span th:case="'FUNCIONARIO'">Funcionário</span>
+                            <span th:case="'CLIENTE'">Cliente</span>
+                            <span th:case="*" th:text="${usuario.papel}"></span>
+                        </span>
+                    </td>
+
+                    <td>
+                        <span
+                                class="badge"
+                                th:classappend="${usuario.ativo}
+                                ? 'badge-success' : 'badge-inactive'"
+                                th:text="${usuario.ativo} ? 'Ativo' : 'Inativo'"
+                        >
+                            Ativo
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
 </body>
 </html>
